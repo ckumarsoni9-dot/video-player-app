@@ -48,10 +48,13 @@ export class YoutubePlayerService {
         'disablekb': 0,
         'enablejsapi': 1,
         'rel': 0,
+        'fs': 0,
         'showinfo': 0,
         'iv_load_policy': 3,
         'modestbranding': 1,
         'widgetid': 1,
+        'origin': window.location.origin,
+        'widget_referrer': window.location.origin
 
       },
       events: {
@@ -70,9 +73,9 @@ export class YoutubePlayerService {
 
   }
   onPlayerReady(event: any) {
-    
+
     if (event) {
-      
+
       this.isPlayerReady = true;
       this.isPlayReadySubject.next(true);
       this.durationSubject.next(this.player.getDuration() - 1);
@@ -85,7 +88,7 @@ export class YoutubePlayerService {
   }
 
   onPlayerStateChange(event: any): void {
-    
+
     if (event.data === YT.PlayerState.ENDED) {
       // Video has actually ended
       // Perform necessary actions after the video ends
@@ -96,7 +99,7 @@ export class YoutubePlayerService {
       // Handle buffering state if needed
     } else if (event.data === YT.PlayerState.PAUSED) {
       // Handle paused state if needed
-      
+
     } else if (event.data === YT.PlayerState.CUED) {
       // Handle cued state if needed
     }
@@ -139,24 +142,24 @@ export class YoutubePlayerService {
 
   updateCurrentTime() {
 
-    if(this.player){
+    if (this.player) {
       setInterval(() => {
 
         if (this.isPlayerReady && this.player.getPlayerState() === YT.PlayerState.PLAYING) {
           this.playerStateSubject.next(1);
 
           const currentTime = this.player.getCurrentTime();
-          const duration = this.player.getDuration() - 1; 
+          const duration = this.player.getDuration() - 1;
           if (currentTime >= duration) {
-            
-            this.stopVideo(); 
+
+            this.stopVideo();
             // this.playerStateSubject.next(0);
-            
+
           } else {
             this.currentTimeSubject.next(currentTime);
           }
         }
-      }, 1000); 
+      }, 1000);
     }
 
 

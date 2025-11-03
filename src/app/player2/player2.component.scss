@@ -1,0 +1,74 @@
+.player-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9;
+  margin: 20px auto;
+  background: black;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+  object-fit: cover;
+}
+
+/* Overlay to hide top bar */
+.hide-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: black;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Overlay to hide bottom-right logo */
+.hide-bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 120px;
+  height: 60px;
+  background: black;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Controls styling */
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+
+  button {
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+
+    &:hover {
+      background: #444;
+    }
+  }
+
+  input[type='range'] {
+    width: 100px;
+  }
+}

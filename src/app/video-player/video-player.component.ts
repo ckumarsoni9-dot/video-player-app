@@ -68,18 +68,28 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     let vidId = this.route.snapshot.queryParamMap.get('vidId');
-     if (window['YT'] && window['YT'].Player) {
-            this.youtubePlayerService.initPlayer('player', 'X2pm4-Klgwg');
 
-          }
-    this.route.queryParamMap.subscribe(params => {
-      vidId = params.get('vidId');
-         if (window['YT'] && window['YT'].Player) {
-            this.youtubePlayerService.initPlayer('player', vidId);
+    if (vidId && window['YT'] && window['YT'].Player) {
+      setTimeout(() => {
+        this.youtubePlayerService.initPlayer('player', vidId);
+      }, 2000);
+      
 
-          }
-    });
-    
+    }else{
+      setTimeout(() => { this.youtubePlayerService.initPlayer('player', 'X2pm4-Klgwg');}, 2000);
+      
+    }
+    // this.route.queryParamMap.subscribe(params => {
+    //   console.log(params);
+
+    //   vidId = params.get('vidId');
+
+    //      if (vidId &&window['YT'] && window['YT'].Player) {
+    //         this.youtubePlayerService.initPlayer('player', vidId);
+
+    //       }
+    // });
+
     console.log('Video ID:', vidId);
     document.getElementById('custome-player').DOCUMENT_NODE
     this.resetHideControlsTimeout();
@@ -108,9 +118,9 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
 
     });
     this.youtubePlayerService.selectedPlaybackRate$.subscribe(rate => this.selectedPlaybackRate = rate);
-     this.isPlayVideo = true;
-        this._common.isVideoPlayed.set(true);
-        return;
+    this.isPlayVideo = true;
+    this._common.isVideoPlayed.set(true);
+    return;
     this.youtubePlayerService.playerState$.subscribe(res => {
 
       if (res == 0) {

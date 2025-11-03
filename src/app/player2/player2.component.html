@@ -1,0 +1,26 @@
+
+<h1>Player 2</h1>
+<div class="player-wrapper">
+  <!-- YouTube player container -->
+  <div id="player" class="player"></div>
+
+  <!-- Overlay to hide YouTube UI -->
+  <div class="hide-top"></div>
+  <div class="hide-bottom-right"></div>
+</div>
+
+<!-- Custom Controls -->
+<div class="controls">
+  <button (click)="playVideo()">▶️</button>
+  <button (click)="pauseVideo()">⏸️</button>
+
+  <input type="range" min="0" max="{{ duration }}" step="1"
+         [value]="currentTime" (input)="seekTo($event)" />
+
+  <input type="range" min="0" max="100"
+         [value]="volume" (input)="setVolume($event)" />
+
+  <button (click)="zoomIn()">🔍+</button>
+  <button (click)="zoomOut()">🔍-</button>
+  <button (click)="toggleFullscreen()">⛶ Fullscreen</button>
+</div>
