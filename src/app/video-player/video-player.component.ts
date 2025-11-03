@@ -68,6 +68,10 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     let vidId = this.route.snapshot.queryParamMap.get('vidId');
+     if (window['YT'] && window['YT'].Player) {
+            this.youtubePlayerService.initPlayer('player', 'X2pm4-Klgwg');
+
+          }
     this.route.queryParamMap.subscribe(params => {
       vidId = params.get('vidId');
          if (window['YT'] && window['YT'].Player) {
