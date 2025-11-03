@@ -1,0 +1,174 @@
+<div id="custome-player" #playerContainer>
+    <div id="player">
+
+    </div>
+
+    <div class="custom-player-wrapper" id="custom-player" (click)="playToggleVideo()">
+
+        @if (showPlayPauseButton) {
+        <div class="center-play-pause p-5 rounded-circle bg-primary" [@fadeInOutZoom]>
+            @if(!isPlayVideo){
+            <i class="bi bi-play-fill play-button"></i>
+            }@else {
+            <i class="bi bi-pause-fill play-button"></i>
+            }
+
+
+        </div>
+        }
+        <!-- @if (isPlayVideo) { -->
+        <div class="d-flex justify-content-between " style="position: absolute; width: 90%;">
+            <div class="text-center ">
+                @if(isBackward){
+                <div class="align-self-center rounded-circle d-flex justify-content-center "
+                    style="width: 100px; height: 100px; background: rgba(0, 0, 0, 0.253)">
+                    <div class="align-self-center">
+                        <p class="mb-0">
+                            <!-- <i class="bi bi-skip-backward fs-2"></i> -->
+                            <i class="bi bi-caret-left fs-2"></i>
+                            <i class="bi bi-caret-left fs-2"></i>
+                            <i class="bi bi-caret-left fs-2"></i>
+                        </p>
+                        <p class="mb-0"><small>10 seconds</small></p>
+                    </div>
+                </div>
+
+                }
+            </div>
+            <div class="text-center  ">
+                @if (isForWard) {
+                <div class="align-self-center rounded-circle d-flex justify-content-center"
+                    style="width: 100px; height: 100px; background: rgba(0, 0, 0, 0.253)">
+                    <div class="align-self-center">
+                        <p class="mb-0">
+                            <!-- <i class="bi bi-skip-forward fs-2"></i> -->
+                            <i class="bi bi-caret-right fs-2"></i>
+                            <i class="bi bi-caret-right fs-2"></i>
+                            <i class="bi bi-caret-right fs-2"></i>
+                        </p>
+                        <p class="mb-0"><small>10 seconds</small></p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        <!-- } -->
+
+    </div>
+    @if (showControls || !isPlayVideo) {
+    <div class="control-bar-container" @fadeInOut>
+        <div id="timeline" class="timeline-container">
+            <div class="timeline" (click)="seek($event)">
+                <div class="thumb-indicator" [style.width.%]="(currentTime / duration) * 100"></div>
+            </div>
+        </div>
+
+        <div class="control-bar pt-3">
+            <div class="control-bar-left">
+
+                <i class="material-icons fast-rewind fs-1 animate__animated " (click)="backward()"
+                    matTooltip="Fast Rewind">replay_10</i>
+                @if(isPlayVideo){
+                <i class="bi bi-pause-fill fs-1" (click)="playToggleVideo()" matTooltip="Pause"></i>
+                }@else {
+                <i class="bi bi-play-fill text-white fs-1" (click)="playToggleVideo()" matTooltip="Play"></i>
+                }
+                <i class="material-icons fast-forward fs-1 animate__animated " (click)="forward()"
+                    matTooltip="Fast Forward">forward_10</i>
+
+                <div class="sound-container">
+                    @if(isMuted){
+                    <i class="bi bi-volume-mute fs-1" (click)="togglemute()" matTooltip="Unmute"></i>
+                    }@else {
+                    <i class="bi bi-volume-down fs-1" (click)="togglemute()" matTooltip="Mute"></i>
+                    }
+
+                    <input type="range" min="0" max="100" id="range2" value="100" (input)="setVolume($event)">
+                </div>
+                <div class="time"> {{ formatTime(currentTime) }} / {{ formatTime(duration) }}</div>
+            </div>
+            <div class="control-bar-right">
+                <div class="quality-info me-5">
+                    <i class="bi bi-info-square" #tooltip="matTooltip"
+                        matTooltip="If you want to watch the video in high quality, please set it to full screen and wait a few seconds for the high-quality video to load. You can check the video quality by clicking on the settings icon and viewing the 'Used quality (px)' option. Please note that there is no manual selection for video quality; it is automatically adjusted based on your internet speed. Thank you for your understanding and patience."
+                        matTooltipPosition="below" matTooltipHideDelay="100000" (click)="tooltip.toggle()"></i>
+                </div>
+
+
+                <i class="bi bi-gear settings" [matMenuTriggerFor]="menu" (click)="  togglePlaybackRateDropdown()"
+                    matTooltip="Setting"></i>
+                <mat-menu #menu="matMenu" yPosition="above">
+                    @if(availableQualities.length > 0){
+                    <!-- <button mat-menu-item [matMenuTriggerFor]="qlty">Quality -->
+                    @if (selectedQuality !='') {
+                    <button mat-menu-item>Quality
+                        @if(selectedQuality == 'hd1080'){
+                        <span class="ms-2 fw-bold">[1080p]</span>
+                        }@else if (selectedQuality == 'hd720') {
+                        <span class="ms-2 fw-bold">[720p]</span>
+                        }@else if (selectedQuality == 'large') {
+                        <span class="ms-2 fw-bold">[480p]</span>
+                        }@else if (selectedQuality == 'medium') {
+                        <span class="ms-2 fw-bold">[360p]</span>
+                        }@else if (selectedQuality == 'small') {
+                        <span class="ms-2 fw-bold">[240p]</span>
+                        }@else if (selectedQuality == 'tiny') {
+                        <span class="ms-2 fw-bold">[144p]</span>
+                        }
+                        <!-- @else{
+                                    <span class="ms-2 fw-bold">[Auto {{selectedQuality}}]</span>
+                                    } -->
+
+                    </button>
+                    }
+                    }
+
+                    <button mat-menu-item [matMenuTriggerFor]="speed">Speed <span
+                            class="ms-2 fw-bold">[{{selectedPlaybackRate}}]</span></button>
+                </mat-menu>
+
+                <!-- <mat-menu #qlty="matMenu" yPosition="above">
+                        @for (quality of availableQualities; track $index) {
+                        @if(quality == 'hd1080'){
+                        <button mat-menu-item (click)="changeQuality('hd1080')">1080p</button>
+                        }@else if (quality == 'hd720') {
+    
+                        <button mat-menu-item (click)="changeQuality('hd720')">720p</button>
+                        }@else if (quality == 'large') {
+                        <button mat-menu-item (click)="changeQuality('large')">480p</button>
+                        }@else if (quality == 'medium') {
+                        <button mat-menu-item (click)="changeQuality('medium')">360p</button>
+                        }@else if (quality == 'small') {
+                        <button mat-menu-item (click)="changeQuality('small')">240p</button>
+                        }@else if (quality == 'tiny') {
+                        <button mat-menu-item (click)="changeQuality('tiny')">144p</button>
+                        }@else{
+                        <button mat-menu-item (click)="changeQuality('auto')">Auto</button>
+                        }
+    
+    
+                        }
+                    </mat-menu> -->
+                <mat-menu #speed="matMenu">
+                    @for (rate of availablePlaybackRates; track $index) {
+                    <button mat-menu-item (click)="changePlaybackRate(rate)">{{rate}}</button>
+                    }
+
+
+                </mat-menu>
+                <div id="fullscreen-btn">
+                    @if (isFullScreen) {
+                    <i class="bi bi-fullscreen-exit" (click)="openFullscreen()" matTooltip="Exit FullScreen"></i>
+                    }@else {
+                    <i class="bi bi-fullscreen" (click)="openFullscreen()" matTooltip="FullScreen"></i>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    }
+
+</div>
