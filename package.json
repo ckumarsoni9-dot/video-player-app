@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:prod": "ng build --configuration=production --base-href=/video-player-app/"
+    "build:gh": "ng build --configuration=production --base-href=/video-player-app/",
+    "build:gh:dev": "ng build --configuration=production --base-href=/video-player-app/"
   },
   "private": true,
   "dependencies": {
